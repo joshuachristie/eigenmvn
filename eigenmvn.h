@@ -35,7 +35,7 @@
 
 #include <Eigen/Dense>
 #include <random>
-
+#include <chrono>
 /*
   We need a functor that can pretend it's const,
   but to be a good random number generator 
@@ -82,8 +82,10 @@ namespace Eigen {
     SelfAdjointEigenSolver<Matrix<Scalar,Dynamic,Dynamic> > _eigenSolver; // drawback: this creates a useless eigenSolver when using Cholesky decomposition, but it yields access to eigenvalues and vectors
     
   public:
-  EigenMultivariateNormal(const Matrix<Scalar,Dynamic,1>& mean,const Matrix<Scalar,Dynamic,Dynamic>& covar,
-			  const bool use_cholesky=false,const uint64_t &seed=std::mt19937::default_seed)
+  EigenMultivariateNormal(const Matrix<Scalar,Dynamic,1>& mean,
+			  const Matrix<Scalar,Dynamic,Dynamic>& covar,
+			  const bool use_cholesky=false,
+			  const uint64_t &seed=std::chrono::high_resolution_clock::now().time_since_epoch().count())
       :_use_cholesky(use_cholesky)
      {
         randN.seed(seed);
